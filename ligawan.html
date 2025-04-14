@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Sayo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+    #introText, #finalText {
+      white-space: pre-wrap;
+      font-size: 1.5em;
+      margin-top: 20%;
+      padding: 0 20px;
+    }
+    #startBtn, #yesBtn, #noBtn, #voiceBtn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff69b4;
+      color: white;
+    }
+    #gameContainer, #finalContainer, #voiceBtn {
+      display: none;
+    }
+    .heart {
+      width: 100px;
+      height: 90px;
+      background: red;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -50px;
+      margin-top: -45px;
+      transform: rotate(-45deg);
+      animation: pulse 1s infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 100px;
+      height: 90px;
+      background: red;
+      position: absolute;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -50px;
+      left: 0;
+    }
+    .heart::after {
+      left: 50px;
+      top: 0;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1) rotate(-45deg); }
+      50% { transform: scale(1.1) rotate(-45deg); }
+      100% { transform: scale(1) rotate(-45deg); }
+    }
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: pink;
+      animation: fall 3s linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(100vh); }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" src="blue (instrumental).mp3" loop></audio>
+  <div id="introContainer">
+    <div id="introText"></div>
+    <button id="startBtn">Okay, ano 'yon?</button>
+  </div>  <div id="gameContainer">
+    <p>Pwede ba kitang ligawan?</p>
+    <button id="yesBtn">YES</button>
+    <button id="noBtn" style="position: absolute;">NO</button>
+  </div>  <div id="finalContainer">
+    <div id="finalText"></div>
+    <div class="heart"></div>
+    <button id="voiceBtn">Pakinggan mo 'to...</button>
+  </div>  <script>
+    const name = prompt("Ano pangalan mo?") || "Crush";
+    const introText = `Hi ${name}... May gusto sana akong sabihin...`;
+    const finalText = `Alam kong simple lang 'to... pero gusto ko lang sabihin na...\nCrush kita.`;
+    const typing = (text, elementId, callback) => {
+      let i = 0;
+      const el = document.getElementById(elementId);
+      el.textContent = "";
+      const interval = setInterval(() => {
+        el.textContent += text[i];
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          if (callback) callback();
+        }
+      }, 50);
+    };
+
+    const music = document.getElementById("bgMusic");
+    music.volume = 0.5;
+    music.play();
+
+    typing(introText, "introText");
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      document.getElementById("introContainer").style.display = "none";
+      document.getElementById("gameContainer").style.display = "block";
+    });
+
+    const noBtn = document.getElementById("noBtn");
+    noBtn.addEventListener("mouseover", () => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    });
+
+    document.getElementById("yesBtn").addEventListener("click", () => {
+      document.getElementById("gameContainer").style.display = "none";
+      document.body.style.background = "#111";
+      music.volume = 1.0;
+      document.getElementById("finalContainer").style.display = "block";
+      typing(finalText, "finalText", () => {
+        for (let i = 0; i < 100; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = `${Math.random() * 100}vw`;
+          confetti.style.animationDelay = `${Math.random() * 3}s`;
+          document.body.appendChild(confetti);
+        }
+      });
+    });
+
+    document.getElementById("voiceBtn").addEventListener("click", () => {
+      music.pause();
+      const msg = new SpeechSynthesisUtterance(`Hi ${name}, sana kahit papano napangiti kita. Gusto ko lang sabihin na espesyal ka, at kung sakaling pwede… sana bigyan mo ko ng chance na makilala ka pa. Kahit simpleng bagay lang 'to, galing 'to sa puso.`);
+      msg.lang = 'fil-PH';
+      speechSynthesis.speak(msg);
+    });
+  </script></body>
+</html>
