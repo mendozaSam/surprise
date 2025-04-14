@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #111;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #message {
+      font-size: 1.5em;
+      text-align: center;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    #openBtn {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color: pink;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .flower {
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle at center, #ff69b4, #c71585);
+      border-radius: 50%;
+      position: absolute;
+      opacity: 0;
+      transform: scale(0);
+      animation: grow 1s forwards;
+    }
+
+    @keyframes grow {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="message"></div>
+  <button id="openBtn">Open</button>
+
+  <script>
+    const name = prompt("Hi! Sino ka?") || "Crush";
+    const messageText = `Hi ${name},\nMay sorpresa ako sa’yo...`;
+
+    const typeText = (text, el, cb) => {
+      let i = 0;
+      const interval = setInterval(() => {
+        el.textContent += text[i];
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          if (cb) cb();
+        }
+      }, 50);
+    };
+
+    const messageDiv = document.getElementById("message");
+    typeText(messageText, messageDiv);
+
+    document.getElementById("openBtn").addEventListener("click", () => {
+      document.body.style.background = "#fdf6f0";
+      messageDiv.style.color = "#222";
+      document.getElementById("openBtn").style.display = "none";
+
+      // create flowers
+      for (let i = 0; i < 25; i++) {
+        const flower = document.createElement("div");
+        flower.className = "flower";
+        flower.style.top = `${Math.random() * 100}vh`;
+        flower.style.left = `${Math.random() * 100}vw`;
+        flower.style.animationDelay = `${i * 0.1}s`;
+        document.body.appendChild(flower);
+      }
+
+      messageDiv.textContent = "Tadaaa! Para sa’yo ‘to!";
+    });
+  </script>
+</body>
+</html>
