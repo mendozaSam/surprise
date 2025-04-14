@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -60,7 +60,7 @@
 <body>
   <div id="message"></div>
   <button id="openBtn">Open</button>
-  <audio id="bgMusic" src="blue-instrumental.mp3" loop autoplay></audio>
+  <audio id="bgMusic" src="blue-instrumental.mp3" loop></audio>
 
   <script>
     const name = prompt("Hi! Sino ka?") || "Crush";
@@ -86,6 +86,10 @@
       document.body.style.background = "#fceef2";
       messageDiv.style.color = "#333";
       messageDiv.textContent = "Tingnan mo oh… Para sa’yo ‘to.";
+
+      // Play background music
+      const bgMusic = document.getElementById("bgMusic");
+      bgMusic.play();
 
       // Grow multiple flowers
       for (let i = 0; i < 10; i++) {
